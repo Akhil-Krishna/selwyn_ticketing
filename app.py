@@ -71,3 +71,8 @@ def futureevents():
 def buytickets():
     #Buy tickets
     return render_template()
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

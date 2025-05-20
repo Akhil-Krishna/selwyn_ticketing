@@ -1,5 +1,5 @@
 -- Create the Database
-CREATE DATABASE selwyn_ticketing;
+-- CREATE DATABASE selwyn_ticketing;
 
 -- Use the newly created database
 USE selwyn_ticketing;
