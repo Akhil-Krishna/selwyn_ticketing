@@ -2,13 +2,26 @@
 
 {% block title %}Selwyn Event Ticketing - Home {% endblock %}
 
+{% block header %}
+<h1>Welcome to Selwyn Event Ticketing</h1>
+{% endblock %}
+
 {% block content %}
-
-<p>Home </p>
-
-
-<p>Add some brief text and an image here </p>
-
-
-
+<div class="row">
+  <div class="col-md-6">
+    <img src="https://www.lincoln.ac.nz/media/s4hjiomk/linc-selwyncampus.jpg" alt="Selwyn Event Center" class="img-fluid rounded">
+  </div>
+  <div class="col-md-6">
+    <h2>Your Gateway to Exciting Events</h2>
+    <p>
+      At Selwyn Event Ticketing, we provide seamless ticketing solutions for various events 
+      across New Zealand. From music festivals to cultural gatherings, we make sure you 
+      never miss out on the fun.
+    </p>
+    <p>
+      Browse our upcoming events, purchase tickets, and join the community of event enthusiasts.
+    </p>
+    <a href="{{url_for('futureevents')}}" class="btn btn-primary">View Upcoming Events</a>
+  </div>
+</div>
 {% endblock %}

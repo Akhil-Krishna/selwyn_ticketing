@@ -8,20 +8,46 @@
   </head>
 
   <body>
-    <nav>
-      <h2>Selwyn Event Ticketing | SET</h2>
-      <p><a href="{{url_for('home')}}">Home</a></p>
-      <p><a href="{{url_for('events')}}">Events</a></p>
-      <p><a href="{{url_for('customers')}}">Customers</a></p>
-      <p><a href="{{url_for('futureevents')}}">Future Events</a></p>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+      <div class="container">
+        <a class="navbar-brand" href="{{url_for('home')}}">Selwyn Event Ticketing | SET</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('home')}}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('events')}}">Events</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('customers')}}">Customers</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('futureevents')}}">Future Events</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('buytickets')}}">Buy Tickets</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('searchcustomer')}}">Search Customers</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('addcustomer')}}">Add Customer</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </nav>
           
-    <section class="content">
-      <header>
+    <section class="content container mb-5">
+      <header class="mb-4">
         {% block header %}{% endblock %}
       </header>
       {% for message in get_flashed_messages() %}
-        <div class="flash">{{ message }}</div>
+        <div class="flash alert alert-info">{{ message }}</div>
       {% endfor %}
       {% block content %}{% endblock %}
     </section>

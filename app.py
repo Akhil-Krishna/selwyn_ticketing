@@ -1,8 +1,4 @@
-from flask import Flask
-from flask import render_template
-from flask import request
-from flask import redirect
-from flask import url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from datetime import date, datetime, timedelta
 import MySQLdb
 from MySQLdb.cursors import DictCursor
@@ -34,16 +30,14 @@ def getCursor():
 def home():
     return render_template("home.html")
 
-
 @app.route("/events", methods=["GET"])
 def events():
     cursor = getCursor()
     if request.method=="GET":
         # Lists the events        
-        qstr = "select event_id, event_name from events;" 
+        qstr = "SELECT event_id, event_name FROM events;" 
         cursor.execute(qstr)        
         events = cursor.fetchall()
-
         return render_template("events.html", events=events)
 
 @app.route("/events/customerlist", methods=["POST"])
