@@ -42,7 +42,10 @@ I implemented comprehensive server-side validation for all forms, including data
 
 ## Image Sources
 
-*Note: No external images were used in this application. All styling utilizes Bootstrap CSS components.*
+- **Home page illustration**: "Flat design online ticket illustration" by Freepik
+  - Source: https://www.freepik.com/free-vector/flat-design-online-ticket-illustration_144642196.htm
+  - Search term: "Ticketing System"
+  - Used under Freepik license
 
 ## Database Questions
 
