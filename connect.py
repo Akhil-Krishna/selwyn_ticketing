@@ -2,7 +2,7 @@
 # PythonAnywhere version: Copy details from Database page and change values.
 # Add this file to .gitignore so it is not synced to GitHub.
 dbuser = "root"         # PUT YOUR MySQL username here
-dbpass = "Akhil@2003"      # PUT YOUR PASSWORD HERE - in PA copy of this file make sure this matches db password set in PA.
+dbpass = "password"      # PUT YOUR PASSWORD HERE - in PA copy of this file make sure this matches db password set in PA.
 dbhost = "localhost" 
 dbport = "3306"         # Same in local and PA version
 dbname = "selwyn_ticketing"
