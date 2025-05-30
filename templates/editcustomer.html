@@ -1,0 +1,96 @@
+<!-- Task 7 : Editing Customer Details with validation , Route : /customer/edit/<customer_id> -->
+
+{% extends "base.html" %}
+
+{% block title %}Edit Customer{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Customer</h2>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="card">
+        <div class="card-header bg-warning text-dark">
+            <h3>Customer Information</h3>
+        </div>
+        
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('editcustomer', customer_id=customer.customer_id) }}" class="needs-validation" novalidate>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="first_name" class="form-label">First Name *</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ customer.first_name }}" required>
+                        <div class="invalid-feedback">
+                            First name is required.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="family_name" class="form-label">Family Name *</label>
+                        <input type="text" class="form-control" id="family_name" name="family_name" value="{{ customer.family_name }}" required>
+                        <div class="invalid-feedback">
+                            Family name is required.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="date_of_birth" class="form-label">Date of Birth *</label>
+                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ customer.date_of_birth.strftime('%Y-%m-%d') }}" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid date of birth.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">Email *</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ customer.email }}" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid email address.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-warning">Update Customer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="mt-3">
+        <a href="{{ url_for('customer_details', customer_id=customer.customer_id) }}" class="btn btn-secondary">Back to Customer Details</a>
+        <a href="{{ url_for('customers') }}" class="btn btn-primary">All Customers</a>
+    </div>
+</div>
+
+<script>
+// Form validation script
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+</script>
+{% endblock %}

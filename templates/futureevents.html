@@ -1,0 +1,36 @@
+<!-- Task 8 : Future events list with available Tickets , Route : /futureevents -->
+
+{% extends "base.html" %}
+
+{% block title %}Selwyn Event Ticketing - Future Events{% endblock %}
+
+{% block header %}
+<h1>Upcoming Events with Available Tickets</h1>
+{% endblock %}
+
+{% block content %}
+{% if events %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% for event in events %}
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-header">
+        <h5 class="card-title">{{ event.event_name }}</h5>
+      </div>
+      <div class="card-body">
+        <p class="card-text"><strong>Date:</strong> {{ event.event_date_formatted }}</p>
+        <p class="card-text"><strong>Tickets Remaining:</strong> {{ event.tickets_remaining }}</p>
+      </div>
+      <div class="card-footer">
+        <a href="{{ url_for('buytickets') }}" class="btn btn-primary">Buy Tickets</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+  No upcoming events with available tickets at this time.
+</div>
+{% endif %}
+{% endblock %}

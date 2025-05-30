@@ -1,3 +1,5 @@
+<!-- Task 2 : Added Image and Some description about the site , Route : / -->
+
 {% extends "base.html" %}
 
 {% block title %}Selwyn Event Ticketing - Home {% endblock %}
@@ -7,11 +9,12 @@
 {% endblock %}
 
 {% block content %}
+<div class="container">
 <div class="row">
-  <div class="col-md-6">
-    <img src="https://www.lincoln.ac.nz/media/s4hjiomk/linc-selwyncampus.jpg" alt="Selwyn Event Center" class="img-fluid rounded">
+  <div class="col-md-6 order-1 order-md-0">
+    <img src="{{ url_for('static', filename='images/image.png') }}" alt="Selwyn Event Center" class="img-fluid rounded">
   </div>
-  <div class="col-md-6">
+  <div class="col-md-6 order-2 order-md-1">
     <h2>Your Gateway to Exciting Events</h2>
     <p>
       At Selwyn Event Ticketing, we provide seamless ticketing solutions for various events 
@@ -23,5 +26,6 @@
     </p>
     <a href="{{url_for('futureevents')}}" class="btn btn-primary">View Upcoming Events</a>
   </div>
+</div>
 </div>
 {% endblock %}
