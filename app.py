@@ -351,6 +351,14 @@ def addcustomer():
                                       family_name=family_name, 
                                       date_of_birth=date_of_birth, 
                                       email=email)
+            if dob < date.today().replace(year=date.today().year - 110):
+                flash("Age cannot be greater than 110 years")
+                return render_template("addcustomer.html", 
+                                        first_name=first_name, 
+                                        family_name=family_name, 
+                                        date_of_birth=date_of_birth, 
+                                        email=email)
+            
         except ValueError:
             flash("Invalid date format. Please use YYYY-MM-DD")
             return render_template("addcustomer.html", 
@@ -424,6 +432,11 @@ def editcustomer(customer_id):
             if dob > date.today():
                 flash("Date of birth cannot be in the future")
                 return redirect(url_for('editcustomer', customer_id=customer_id))
+            
+            if dob < date.today().replace(year=date.today().year - 110):
+                flash("Age cannot be greater than 110 years")
+                return redirect(url_for('editcustomer', customer_id=customer_id))
+            
         except ValueError:
             flash("Invalid date format. Please use YYYY-MM-DD")
             return redirect(url_for('editcustomer', customer_id=customer_id))
