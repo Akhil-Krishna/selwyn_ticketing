@@ -113,7 +113,8 @@ def customer_details(customer_id):
             WHERE customer_id = %s
         """, (customer_id,))
         customer = cursor.fetchone()
-        
+        dob = customer['date_of_birth']
+        formatted_dob = format_date_nz(dob)
         if not customer:
             flash("Customer not found")
             return redirect(url_for('customers'))
@@ -139,6 +140,7 @@ def customer_details(customer_id):
         
         return render_template("customerdetails.html", 
                               customer=customer, 
+                              dob=formatted_dob,
                               tickets=formatted_tickets, 
                               total_tickets=total_tickets)
     finally:
