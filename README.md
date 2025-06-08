@@ -1,55 +1,72 @@
 # Selwyn Event Ticketing (SET)
 
-A Flask-based web application for managing event ticketing, customers, and ticket sales for Selwyn Event Ticketing company.
+This is a web application I built using Flask, aimed at handling the core operations of the Selwyn Event Ticketing platform. It manages customer records, event data, and ticket purchases — all integrated with a MySQL database.
 
-## Design Decisions
+---
 
-### 1. Database Connection Management
-I implemented a global connection pattern with the `getCursor()` function to manage database connections efficiently. This approach ensures a single connection is maintained throughout the application's lifecycle while providing fresh cursors for each query. This decision was made to avoid connection overhead while maintaining thread safety for the single-user development environment.
+## Design Choices
 
-### 2. Date Formatting Strategy
-I created a dedicated `format_date_nz()` function to consistently format dates in New Zealand format (DD/MM/YYYY) throughout the application. This centralized approach ensures consistency across all templates and makes it easy to modify date formatting if requirements change. The function handles both string and date object inputs for flexibility.
+### 1. How I Handled Database Connections
 
-### 3. Form Handling with GET/POST Pattern
-For all forms, I consistently used GET requests to display empty forms and POST requests to process form submissions. This RESTful approach provides clear separation of concerns - GET for data retrieval and display, POST for data modification. This pattern is repeated across add customer, edit customer, buy tickets, and search functionality.
+Instead of reusing one connection across the app (which can cause problems), I made a function that sets up a fresh connection and cursor every time a query is needed. It seemed cleaner and helps avoid timeout issues — especially when hosted online.
 
-### 4. Customer ID Management
-I chose to auto-generate customer IDs by finding the maximum existing ID and incrementing it, rather than relying on database auto-increment. This gives more control over ID assignment and ensures consistency with the existing data structure where customer_id is not set to auto-increment.
+### 2. Getting Dates to Look Right
 
-### 5. Age Validation Logic
-For ticket purchases, I implemented age validation that calculates the customer's age at the event date rather than their current age. This ensures customers who will meet the age requirement by the event date can purchase tickets, providing a better user experience while maintaining event restrictions.
+I wrote a simple function to show dates in DD/MM/YYYY format — the usual NZ style. This way, all pages show consistent date formatting, and if we ever need to switch formats, we can just tweak one place.
 
-### 6. Ticket Purchase Update vs Insert
-I implemented logic to check if a customer already has tickets for an event. If they do, the system updates their existing purchase by adding more tickets rather than creating a duplicate entry. This prevents data duplication and provides a cleaner ticket sales record.
+### 3. Handling Forms: GET vs POST
 
-### 7. Search Functionality Implementation
-For customer search, I built dynamic SQL queries based on which fields are provided (first name, family name, or both). This flexible approach allows partial matching using LIKE operators and handles empty search fields gracefully, providing a user-friendly search experience.
+I used GET requests for showing forms and POST for when data is submitted. It’s a clear pattern and helped me keep the logic tidy. You’ll see this in most of the form-based features like adding or editing customers, or buying tickets.
 
-### 8. Template Structure and Inheritance
-I utilized Flask's template inheritance system with a base template for consistent navigation and styling across all pages. Each specific page extends the base template, ensuring consistent branding and navigation while avoiding code duplication.
+### 4. How Customer IDs Are Assigned
 
-### 9. Error Handling with Flash Messages
-I consistently used Flask's flash messaging system for user feedback throughout the application. This provides immediate feedback for validation errors, successful operations, and system messages without requiring additional page redirects or complex state management.
+Since the original setup didn’t use auto-increment for customer IDs, I wrote logic to find the highest ID and add one when a new customer is created. This fits with the existing data model and avoids messing with the table schema.
 
-### 10. Future Events Filtering
-For the future events display, I used SQL date comparison with Python's `date.today()` to filter events. This server-side filtering ensures accuracy and reduces data transfer. The query also includes ticket availability calculations to only show events with remaining tickets.
+### 5. Age Checks Based on Event Date
 
-### 11. Sorting and Ordering Strategy
-I implemented consistent sorting throughout the application - customers by family name then first name, events by date, and customer lists by family name with youngest first for same family names. This provides predictable and logical ordering for users.
+When a customer tries to buy a ticket, I check how old they'll be on the date of the event — not just how old they are now. That felt fairer, since someone might qualify by the time the event actually happens.
 
-### 12. Form Validation Approach
-I implemented comprehensive server-side validation for all forms, including data type validation, date range checking, email uniqueness verification, and required field validation. This ensures data integrity and provides clear error messages to users.
+### 6. Avoiding Duplicate Ticket Records
 
-## Image Sources
+If a customer already bought tickets for an event, the app just updates the quantity instead of creating another row. That keeps things tidy in the database.
 
-- **Home page illustration**: "Flat design online ticket illustration" by Freepik
-  - Source: https://www.freepik.com/free-vector/flat-design-online-ticket-illustration_144642196.htm
-  - Search term: "Ticketing System"
-  - Used under Freepik license
+### 7. Search Logic for Customers
 
-## Database Questions
+I used flexible search logic so users can search by first name, last name, or both. It uses SQL `LIKE` to support partial matches — which is nice when you only remember part of someone’s name.
 
-### 1. SQL statement that creates the events table:
+### 8. Keeping the Look Consistent
+
+All the pages extend a single `base.html` file. It has the site header and nav bar, so everything looks consistent and I don’t have to repeat code.
+
+### 9. Showing Feedback with Flash
+
+Whenever a form succeeds or fails, the user sees a flash message — whether it’s “Customer added” or “Please fill out all fields.” It’s a quick way to improve usability without needing complex UI work.
+
+### 10. Showing Only Upcoming Events
+
+On the “Future Events” page, I used the server date to filter out past events. Only events in the future with available tickets are shown. That keeps things relevant.
+
+### 11. Sorting Data Clearly
+
+Customers are sorted by last name and then first name, and the customer list for each event shows youngest people first (if surnames match). Events are sorted by date. It just makes everything easier to browse.
+
+### 12. Validating User Input
+
+Every form checks that required fields are filled, that emails aren’t duplicated, that ticket counts are valid, and that dates make sense. It’s not fancy, but it stops a lot of bugs before they happen.
+
+---
+
+## Image Attribution
+
+* **Homepage Illustration**:
+  “Flat design online ticket illustration”
+  by Freepik – [View Source](https://www.freepik.com/free-vector/flat-design-online-ticket-illustration_144642196.htm)
+
+---
+
+## 🗃️ SQL + Database Integration
+
+### 1. How the `events` table is defined:
 
 ```sql
 CREATE TABLE events (
@@ -62,7 +79,7 @@ CREATE TABLE events (
 );
 ```
 
-### 2. SQL lines that set up the relationship between customers and events through ticket purchases:
+### 2. How customers and events are linked via ticket purchases:
 
 ```sql
 CREATE TABLE ticket_sales (
@@ -76,7 +93,7 @@ CREATE TABLE ticket_sales (
 );
 ```
 
-### 3. SQL script to create event_categories table:
+### 3. SQL to create `event_categories`:
 
 ```sql
 CREATE TABLE event_categories (
@@ -87,41 +104,40 @@ CREATE TABLE event_categories (
 );
 ```
 
-### 4. SQL statement to add a new category:
+### 4. SQL to insert a new category:
 
 ```sql
 INSERT INTO event_categories (category_name, description)
 VALUES ('Music Festivals', 'Large-scale outdoor music events featuring multiple artists and stages');
 ```
 
-### 5. Changes needed to integrate event_categories table:
+### 5. If I wanted to link categories to events:
 
-To fully integrate the event_categories table into the data model, the following changes would be needed:
+* I’d add a `category_id` column to the `events` table.
+* Then set it as a foreign key pointing to `event_categories`.
+* I’d update existing records to assign them a category.
+* The UI and routes would need updates to show categories and let users filter or assign them.
+* Admin tools could be added to manage categories too.
 
-- **Add foreign key to events table**: Add a `category_id` column to the `events` table as a FOREIGN KEY referencing `event_categories(category_id)`. This would establish the relationship between events and their categories.
+---
 
-- **Update existing events**: Assign appropriate category IDs to all existing events in the database to maintain data consistency.
+## Tech Stack Used
 
-- **Modify application queries**: Update all queries that retrieve event information to include category details through JOIN operations where category information is needed.
+* **Python**: Flask for the backend logic and routes
+* **MySQL**: Database engine with `MySQLdb` connector
+* **HTML/CSS**: Bootstrap for layout and styling
+* **Hosting**: PythonAnywhere
+* **Templates**: Jinja2 with template inheritance
 
-- **Update user interface**: Modify forms and display pages to show category information and allow category selection when creating or editing events.
+---
 
-- **Add category management**: Create additional routes and templates for managing event categories (add, edit, delete categories) for administrative purposes.
+##  Features at a Glance
 
-## Technologies Used
+* Add, edit, and search for customers
+* View customer ticket history
+* Buy tickets with age and capacity checks
+* Filter and view future events with available seats
+* Friendly and consistent interface using Bootstrap
+* Secure form submissions with clear error handling
+* Fully functional on local and PythonAnywhere
 
-- **Backend**: Python Flask
-- **Database**: MySQL with MySQLdb connector
-- **Frontend**: HTML5, Bootstrap CSS
-- **Template Engine**: Jinja2
-- **Development Environment**: PythonAnywhere hosting
-
-## Key Features
-
-- Customer management (add, edit, search, view details)
-- Event listing and management
-- Ticket purchasing with age and availability validation
-- Future events display with remaining ticket counts
-- Customer ticket purchase history
-- Professional Bootstrap-styled interface
-- Comprehensive form validation and error handling
